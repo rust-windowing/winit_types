@@ -1,14 +1,18 @@
 #![cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "netbsd", target_os = "openbsd"))]
 
 use glutin_x11_sym::x11_dl::error::OpenError;
+use smithay_client_toolkit::reexports::client::ConnectError;
 
 use std::fmt;
+use std::sync::Arc;
 
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug)]
 pub enum OsError {
     XError(XError),
     XMisc(&'static str),
     XNotSupported(XNotSupported),
+    // For some reason is not clone, so just Arc it.
+    WaylandConnectError(Arc<ConnectError>)
 }
 
 impl fmt::Display for OsError {
@@ -17,6 +21,7 @@ impl fmt::Display for OsError {
             OsError::XError(e) => f.pad(&e.description),
             OsError::XMisc(e) => f.pad(e),
             OsError::XNotSupported(e) => e.fmt(f),
+            OsError::WaylandConnectError(e) => e.fmt(f),
         }
     }
 }
@@ -49,10 +54,10 @@ pub enum XNotSupported {
     XOpenDisplayFailed,
 }
 
-impl From<&OpenError> for XNotSupported {
+impl From<OpenError> for OsError {
     #[inline]
-    fn from(err: &OpenError) -> XNotSupported {
-        XNotSupported::LibraryOpenError(err.clone())
+    fn from(err: OpenError) -> OsError {
+        OsError::XNotSupported(XNotSupported::LibraryOpenError(err))
     }
 }
 

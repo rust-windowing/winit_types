@@ -5,21 +5,21 @@ use crate::platform;
 pub use crate::platform::OsError;
 
 /// An error whose cause is outside of the crate's control.
-#[derive(Debug)]
-pub struct ExternalError {
+#[derive(Clone, Debug)]
+pub struct Error {
     line: u32,
-    file: String,
+    file: &'static str,
     ty: ErrorType,
 }
 
-impl ExternalError {
-    pub fn new(line: u32, file: String, ty: ErrorType) -> Self {
-        ExternalError { line, file, ty }
+impl Error {
+    pub fn new(line: u32, file: &'static str, ty: ErrorType) -> Self {
+        Error { line, file, ty }
     }
 }
 
 /// The type of error.
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum ErrorType {
     /// The operation is not supported by the backend.
     NotSupported,
@@ -35,7 +35,7 @@ pub enum ErrorType {
 }
 
 /// The error type for when the OS cannot perform the requested operation.
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct OsErrorWrapper {
     error: platform::OsError,
 }
@@ -48,8 +48,15 @@ impl OsErrorWrapper {
 
 #[macro_export]
 macro_rules! make_error {
-    ($ty:expr) => {{
-        crate::error::ExternalError::new(line!(), file!(), $ty)
+    ($errty:expr) => {{
+        winit_types::error::Error::new(line!(), file!(), $errty)
+    }};
+}
+
+#[macro_export]
+macro_rules! make_oserror {
+    ($err:expr) => {{
+        make_error!(winit_types::error::ErrorType::OsError(winit_types::error::OsErrorWrapper::new($err)))
     }};
 }
 
@@ -62,7 +69,7 @@ impl fmt::Display for OsErrorWrapper {
     }
 }
 
-impl fmt::Display for ExternalError {
+impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         f.pad(&format!(
             "Error at{}:{}: {}",
@@ -83,5 +90,5 @@ impl fmt::Display for ErrorType {
     }
 }
 
-impl error::Error for OsError {}
-impl error::Error for ExternalError {}
+impl error::Error for OsErrorWrapper {}
+impl error::Error for Error {}

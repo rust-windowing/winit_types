@@ -10,7 +10,7 @@ mod platform;
     target_os = "netbsd",
     target_os = "openbsd"
 ))]
-#[path = "platform/linux.rs"]
+#[path = "platform/unix.rs"]
 mod platform;
 #[cfg(target_os = "macos")]
 #[path = "platform/macos.rs"]

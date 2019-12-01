@@ -15,3 +15,4 @@ core-graphics = "0.17.3"
 
 [target.'cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "openbsd", target_os = "netbsd"))'.dependencies]
 glutin_x11_sym = { version = "0.1.0", path = "../glutin_x11_sym" }
+smithay-client-toolkit = "0.6"
