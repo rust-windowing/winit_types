@@ -1,7 +1,8 @@
 #![cfg(target_os = "macos")]
+
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum OsError {
     CGError(core_graphics::base::CGError),
     CreationError(&'static str),

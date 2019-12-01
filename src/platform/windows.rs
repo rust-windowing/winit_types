@@ -1,2 +1,5 @@
 #![cfg(target_os = "windows")]
-pub type OsError = std::io::Error;
+
+use std::sync::Arc;
+
+pub type OsError = Arc<std::io::Error>;

@@ -1,7 +1,8 @@
-#[cfg(any(feature = "web-sys", feature = "stdweb"))]
+#![cfg(target_arch = "wasm32")]
+
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct OsError(pub String);
 
 impl fmt::Display for OsError {
