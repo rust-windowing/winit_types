@@ -12,7 +12,7 @@ pub enum OsError {
     XMisc(&'static str),
     XNotSupported(XNotSupported),
     // For some reason is not clone, so just Arc it.
-    WaylandConnectError(Arc<ConnectError>)
+    WaylandConnectError(Arc<ConnectError>),
 }
 
 impl fmt::Display for OsError {
@@ -63,12 +63,9 @@ impl From<OpenError> for OsError {
 
 impl fmt::Display for XNotSupported {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
-        formatter.write_str(
-
-        match *self {
+        formatter.write_str(match *self {
             XNotSupported::LibraryOpenError(_) => "Failed to load one of xlib's shared libraries",
             XNotSupported::XOpenDisplayFailed => "Failed to open connection to X server",
-        }
-            )
+        })
     }
 }

@@ -56,25 +56,21 @@ macro_rules! make_error {
 #[macro_export]
 macro_rules! make_oserror {
     ($err:expr) => {{
-        make_error!(winit_types::error::ErrorType::OsError(winit_types::error::OsErrorWrapper::new($err)))
+        make_error!(winit_types::error::ErrorType::OsError(
+            winit_types::error::OsErrorWrapper::new($err)
+        ))
     }};
 }
 
 impl fmt::Display for OsErrorWrapper {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
-        f.pad(&format!(
-            "Os Error: {}",
-            self.error
-        ))
+        f.pad(&format!("Os Error: {}", self.error))
     }
 }
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
-        f.pad(&format!(
-            "Error at{}:{}: {}",
-            self.file, self.line, self.ty
-        ))
+        f.pad(&format!("Error at{}:{}: {}", self.file, self.line, self.ty))
     }
 }
 
@@ -83,7 +79,9 @@ impl fmt::Display for ErrorType {
         match self {
             ErrorType::OsError(oew) => oew.fmt(f),
             ErrorType::NotSupported => f.pad("Operation not supported"),
-            ErrorType::NoAvailableConfig => f.pad("No available config with the requested properties"),
+            ErrorType::NoAvailableConfig => {
+                f.pad("No available config with the requested properties")
+            }
             ErrorType::BadApiUsage => f.pad("This crate's API has been used incorrectly."),
             ErrorType::ContextLost => f.pad("Context lost."),
         }
