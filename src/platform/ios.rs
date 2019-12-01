@@ -2,7 +2,7 @@
 
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum OsError {}
 
 impl fmt::Display for OsError {
