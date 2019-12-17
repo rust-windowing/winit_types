@@ -1,7 +1,8 @@
 #![cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "netbsd", target_os = "openbsd"))]
 
-use glutin_x11_sym::x11_dl::error::OpenError;
+use glutin_osmesa_sys::LoadingError;
 use smithay_client_toolkit::reexports::client::ConnectError;
+use x11_dl::error::OpenError;
 
 use std::fmt;
 use std::sync::Arc;
@@ -9,7 +10,8 @@ use std::sync::Arc;
 #[derive(Clone, Debug)]
 pub enum OsError {
     XError(XError),
-    XMisc(&'static str),
+    Misc(String),
+    OsMesaLoadingError(LoadingError),
     XNotSupported(XNotSupported),
     // For some reason is not clone, so just Arc it.
     WaylandConnectError(Arc<ConnectError>),
@@ -19,9 +21,10 @@ impl fmt::Display for OsError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         match self {
             OsError::XError(e) => f.pad(&e.description),
-            OsError::XMisc(e) => f.pad(e),
+            OsError::OsMesaLoadingError(e) => f.pad(&format!("{:?}", e)),
             OsError::XNotSupported(e) => e.fmt(f),
             OsError::WaylandConnectError(e) => e.fmt(f),
+            OsError::Misc(e) => f.pad(e),
         }
     }
 }
