@@ -27,20 +27,18 @@
 //! feel like they have bad eyesight, which will potentially cause them to think about growing elderly, resulting in
 //! them entering an existential panic. Once users enter that state, they will no longer be focused on your application.
 //!
-//! There are two ways to get the DPI factor:
-//! - You can track the [`HiDpiFactorChanged`](crate::event::WindowEvent::HiDpiFactorChanged) event of your
-//!   windows. This event is sent any time the DPI factor changes, either because the window moved to another monitor,
-//!   or because the user changed the configuration of their screen.
-//! - You can also retrieve the DPI factor of a monitor by calling
-//!   [`MonitorHandle::hidpi_factor`](crate::monitor::MonitorHandle::hidpi_factor), or the
-//!   current DPI factor applied to a window by calling
-//!   [`Window::hidpi_factor`](crate::window::Window::hidpi_factor), which is roughly equivalent
+//! There are two ways with `winit` to get the DPI factor:
+//! - You can track the `winit::event::WindowEvent::HiDpiFactorChanged` event of your windows. This event is sent any
+//!   time the DPI factor changes, either because the window moved to another monitor, or because the user changed the
+//!   configuration of their screen.
+//! - You can also retrieve the DPI factor of a monitor by calling `winit::monitor::MonitorHandle::hidpi_factor`, or the
+//!   current DPI factor applied to a window by calling `winit::window::Window::hidpi_factor`, which is roughly equivalent
 //!   to `window.current_monitor().hidpi_factor()`.
 //!
-//! Depending on the platform, the window's actual DPI factor may only be known after
-//! the event loop has started and your window has been drawn once. To properly handle these cases,
-//! the most robust way is to monitor the [`HiDpiFactorChanged`](crate::event::WindowEvent::HiDpiFactorChanged)
-//! event and dynamically adapt your drawing logic to follow the DPI factor.
+//! Depending on the platform, the window's actual DPI factor may only be known after the event loop has started and
+//! your window has been drawn once. To properly handle these cases, the most robust way is to monitor the
+//! `winit::event::WindowEvent::HiDpiFactorChanged` event and dynamically adapt your drawing logic to follow the DPI
+//! factor.
 //!
 //! Here's an overview of what sort of DPI factors you can expect, and where they come from:
 //! - **Windows:** On Windows 8 and 10, per-monitor scaling is readily configured by users from the display settings.
@@ -59,22 +57,20 @@
 //!
 //! The window's logical size is conserved across DPI changes, resulting in the physical size changing instead. This
 //! may be surprising on X11, but is quite standard elsewhere. Physical size changes always produce a
-//! [`Resized`](crate::event::WindowEvent::Resized) event, even on platforms where no resize actually occurs,
-//! such as macOS and Wayland. As a result, it's not necessary to separately handle
-//! [`HiDpiFactorChanged`](crate::event::WindowEvent::HiDpiFactorChanged) if you're only listening for size.
+//! `winit::event::WindowEvent::Resized` event, even on platforms where no resize actually occurs, such as macOS and
+//! Wayland. As a result, it's not necessary to separately handle `winit::event::WindowEvent::HiDpiFactorChanged` if
+//! you're only listening for size.
 //!
 //! Your GPU has no awareness of the concept of logical pixels, and unless you like wasting pixel density, your
 //! framebuffer's size should be in physical pixels.
 //!
-//! `winit` will send [`Resized`](crate::event::WindowEvent::Resized) events whenever a window's logical size
-//! changes, and [`HiDpiFactorChanged`](crate::event::WindowEvent::HiDpiFactorChanged) events
-//! whenever the DPI factor changes. Receiving either of these events means that the physical size of your window has
-//! changed, and you should recompute it using the latest values you received for each. If the logical size and the
-//! DPI factor change simultaneously, `winit` will send both events together; thus, it's recommended to buffer
-//! these events and process them at the end of the queue.
+//! `winit` will send `winit::event::WindowEvent::Resized` events whenever a window's logical size changes, and
+//! `winit::event::WindowEvent::HiDpiFactorChanged` events whenever the DPI factor changes. Receiving either of these
+//! events means that the physical size of your window has changed, and you should recompute it using the latest values
+//! you received for each. If the logical size and the DPI factor change simultaneously, `winit` will send both events
+//! together; thus, it's recommended to buffer these events and process them at the end of the queue.
 //!
-//! If you never received any [`HiDpiFactorChanged`](crate::event::WindowEvent::HiDpiFactorChanged) events,
-//! then your window's DPI factor is 1.
+//! If you never received any `winit::event::WindowEvent::HiDpiFactorChanged` events, then your window's DPI factor is 1.
 
 /// Checks that the DPI factor is a normal positive `f64`.
 ///
