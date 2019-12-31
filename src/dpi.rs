@@ -329,3 +329,12 @@ impl Into<(u32, u32)> for PhysicalSize {
         (self.width.round() as _, self.height.round() as _)
     }
 }
+
+/// Rectangles to submit as buffer damage.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Rect {
+    pub x: u32,
+    pub y: u32,
+    pub width: u32,
+    pub height: u32,
+}
