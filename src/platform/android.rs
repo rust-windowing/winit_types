@@ -1,3 +1,4 @@
 #![cfg(target_os = "android")]
 
-pub type OsError = std::io::Error;
+use std::sync::Arc;
+pub type OsError = Arc<std::io::Error>;
