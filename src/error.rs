@@ -110,8 +110,6 @@ pub enum ErrorType {
     /// The context you were using for this operation has been lost. This is
     /// generally non-recoverable.
     ContextLost,
-    /// We could not find a function ptr for the requested function.
-    FunctionDoesNotExist,
 
     /// Multiple errors happened.
     Multiple(Vec<Box<Error>>),
@@ -171,7 +169,6 @@ impl fmt::Display for ErrorType {
                 t
             )),
             ErrorType::ContextLost => f.pad("Context lost."),
-            ErrorType::FunctionDoesNotExist => f.pad("Function does not exist"),
             ErrorType::Multiple(errs) => f.pad(&format!("Multiple errors: {:?}", errs)),
         }
     }
