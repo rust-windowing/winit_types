@@ -162,7 +162,7 @@ pub fn validate_scale_factor(dpi_factor: f64) -> bool {
 /// fractional part, which can cause noticable issues. To help with that, an `Into<(i32, i32)>`
 /// implementation is provided which does the rounding for you.
 #[derive(Debug, Copy, Clone, PartialEq)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde_feature", derive(Serialize, Deserialize))]
 pub struct LogicalPosition<P> {
     pub x: P,
     pub y: P,
@@ -227,7 +227,7 @@ impl<P: Pixel, X: Pixel> Into<[X; 2]> for LogicalPosition<P> {
 
 /// A position represented in physical pixels.
 #[derive(Debug, Copy, Clone, PartialEq)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde_feature", derive(Serialize, Deserialize))]
 pub struct PhysicalPosition<P> {
     pub x: P,
     pub y: P,
@@ -292,7 +292,7 @@ impl<P: Pixel, X: Pixel> Into<[X; 2]> for PhysicalPosition<P> {
 
 /// A size represented in logical pixels.
 #[derive(Debug, Copy, Clone, PartialEq)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde_feature", derive(Serialize, Deserialize))]
 pub struct LogicalSize<P> {
     pub width: P,
     pub height: P,
@@ -354,7 +354,7 @@ impl<P: Pixel, X: Pixel> Into<[X; 2]> for LogicalSize<P> {
 
 /// A size represented in physical pixels.
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde_feature", derive(Serialize, Deserialize))]
 pub struct PhysicalSize<P> {
     pub width: P,
     pub height: P,
@@ -416,7 +416,7 @@ impl<P: Pixel, X: Pixel> Into<[X; 2]> for PhysicalSize<P> {
 
 /// A size that's either physical or logical.
 #[derive(Debug, Copy, Clone, PartialEq)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde_feature", derive(Serialize, Deserialize))]
 pub enum Size {
     Physical(PhysicalSize<u32>),
     Logical(LogicalSize<f64>),
@@ -458,7 +458,7 @@ impl<P: Pixel> From<LogicalSize<P>> for Size {
 
 /// A position that's either physical or logical.
 #[derive(Debug, Copy, Clone, PartialEq)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde_feature", derive(Serialize, Deserialize))]
 pub enum Position {
     Physical(PhysicalPosition<i32>),
     Logical(LogicalPosition<f64>),

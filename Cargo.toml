@@ -10,6 +10,15 @@ readme = "README.md"
 repository = "https://github.com/rust-windowing/winit_types"
 documentation = "https://docs.rs/winit_types"
 
+[package.metadata.docs.rs]
+features = ["serde_feature"]
+
+[features]
+serde_feature = ["serde"]
+
+[dependencies]
+serde = { version = "1", optional = true, features = ["serde_derive"] }
+
 [target.'cfg(target_os = "macos")'.dependencies]
 core-graphics = "0.17.3"
 
