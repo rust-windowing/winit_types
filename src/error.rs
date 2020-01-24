@@ -92,10 +92,18 @@ pub enum ErrorType {
     RobustnessNotSupported,
     /// The opengl version is not supported by the backend.
     OpenGlVersionNotSupported,
+    /// The swap control range is not supported.
+    SwapControlRangeNotSupported,
     /// Adaptive swap control is not supported.
     AdaptiveSwapControlNotSupported,
-    /// Flush control is not supported.
+    /// The requested flush control is not supported.
     FlushControlNotSupported,
+    /// The requested floating point surface mode is not supported.
+    FloatingPointSurfaceNotSupported,
+    /// The requested sRGB surface mode is not supported.
+    SrgbSurfaceNotSupported,
+    /// The requested multisampling mode is not supported.
+    MultisamplingNotSupported,
     /// The OS cannot perform the operation.
     OsError(OsErrorWrapper),
     /// The requested config was not available.
@@ -156,6 +164,10 @@ impl fmt::Display for ErrorType {
                 f.pad("Adaptive swap control not supported")
             }
             ErrorType::FlushControlNotSupported => f.pad("Flush control not supported"),
+            ErrorType::FloatingPointSurfaceNotSupported => f.pad("Floating point surface not supported"),
+            ErrorType::SwapControlRangeNotSupported => f.pad("Swap control range not supported"),
+            ErrorType::MultisamplingNotSupported => f.pad("Multisampling not supported"),
+            ErrorType::SrgbSurfaceNotSupported => f.pad("Srgb not supported"),
             ErrorType::NoAvailableConfig => {
                 f.pad("No available config with the requested properties")
             }
