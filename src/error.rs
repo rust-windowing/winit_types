@@ -164,7 +164,9 @@ impl fmt::Display for ErrorType {
                 f.pad("Adaptive swap control not supported")
             }
             ErrorType::FlushControlNotSupported => f.pad("Flush control not supported"),
-            ErrorType::FloatingPointSurfaceNotSupported => f.pad("Floating point surface not supported"),
+            ErrorType::FloatingPointSurfaceNotSupported => {
+                f.pad("Floating point surface not supported")
+            }
             ErrorType::SwapControlRangeNotSupported => f.pad("Swap control range not supported"),
             ErrorType::MultisamplingNotSupported => f.pad("Multisampling not supported"),
             ErrorType::SrgbSurfaceNotSupported => f.pad("Srgb not supported"),
