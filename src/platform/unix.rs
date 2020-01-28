@@ -15,6 +15,7 @@ pub enum OsError {
     XNotSupported(XNotSupported),
     // For some reason is not clone, so just Arc it.
     WaylandConnectError(Arc<ConnectError>),
+    IoError(Arc<std::io::Error>),
 }
 
 impl fmt::Display for OsError {
@@ -25,6 +26,7 @@ impl fmt::Display for OsError {
             OsError::XNotSupported(e) => e.fmt(f),
             OsError::WaylandConnectError(e) => e.fmt(f),
             OsError::Misc(e) => f.pad(e),
+            OsError::IoError(e) => e.fmt(f),
         }
     }
 }
