@@ -82,6 +82,19 @@ impl Error {
     }
 }
 
+/// The type of bits is not supported
+#[derive(Clone, Debug)]
+pub enum BitType {
+    /// The requested number of stencil bits is not supported
+    Stencil,
+    /// The requested number of depth bits is not supported
+    Depth,
+    /// The requested number of color bits is not supported
+    Color,
+    /// The requested number of alpha bits is not supported
+    Alpha,
+}
+
 /// The type of error.
 #[derive(Clone, Debug)]
 #[non_exhaustive]
@@ -102,8 +115,24 @@ pub enum ErrorType {
     FloatingPointSurfaceNotSupported,
     /// The requested sRGB surface mode is not supported.
     SrgbSurfaceNotSupported,
+    /// The requested hardware acceleration mode is not supported.
+    HardwareAccelerationNotSupported,
+    /// The requested surface types were not supported.
+    SurfaceTypesNotSupported {
+        change_pbuffer: bool,
+        change_pixmap: bool,
+        change_surfaceless: bool,
+        change_window: bool,
+    },
+    /// Stereoscopy is not supported.
+    StereoscopyNotSupported,
+    /// The requested double buffering mode is not supported.
+    DoubleBufferNotSupported,
     /// The requested multisampling mode is not supported.
     MultisamplingNotSupported,
+    /// The requested number of bits is not supported, with a suggestion of what
+    /// to change it to.
+    NumberOfBitsNotSupported(BitType, u8),
     /// The OS cannot perform the operation.
     OsError(OsErrorWrapper),
     /// The requested config was not available.
@@ -149,37 +178,16 @@ impl fmt::Display for OsErrorWrapper {
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
-        f.pad(&format!("Error at{}:{}: {}", self.file, self.line, self.ty))
+        f.pad(&format!(
+            "Error at {}:{}: {}",
+            self.file, self.line, self.ty
+        ))
     }
 }
 
 impl fmt::Display for ErrorType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
-        match self {
-            ErrorType::OsError(oew) => oew.fmt(f),
-            ErrorType::NotSupported(t) => f.pad(&format!("Operation not supported: {}", t)),
-            ErrorType::RobustnessNotSupported => f.pad("Robustness not supported"),
-            ErrorType::OpenGlVersionNotSupported => f.pad("OpenGL version not supported"),
-            ErrorType::AdaptiveSwapControlNotSupported => {
-                f.pad("Adaptive swap control not supported")
-            }
-            ErrorType::FlushControlNotSupported => f.pad("Flush control not supported"),
-            ErrorType::FloatingPointSurfaceNotSupported => {
-                f.pad("Floating point surface not supported")
-            }
-            ErrorType::SwapControlRangeNotSupported => f.pad("Swap control range not supported"),
-            ErrorType::MultisamplingNotSupported => f.pad("Multisampling not supported"),
-            ErrorType::SrgbSurfaceNotSupported => f.pad("Srgb not supported"),
-            ErrorType::NoAvailableConfig => {
-                f.pad("No available config with the requested properties")
-            }
-            ErrorType::BadApiUsage(t) => f.pad(&format!(
-                "This crate's API has been used incorrectly: {}",
-                t
-            )),
-            ErrorType::ContextLost => f.pad("Context lost."),
-            ErrorType::Multiple(errs) => f.pad(&format!("Multiple errors: {:?}", errs)),
-        }
+        f.pad(&format!("{:?}", self))
     }
 }
 
