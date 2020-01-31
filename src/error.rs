@@ -54,7 +54,9 @@ impl Error {
                 errs1.append(errs2);
             }
             (
-                err1 @ Error {
+                err1
+                @
+                Error {
                     ty: ErrorType::Multiple(_),
                     ..
                 },
@@ -64,7 +66,10 @@ impl Error {
             }
             (
                 err1,
-                mut err2 @ Error {
+                mut
+                err2
+                @
+                Error {
                     ty: ErrorType::Multiple(_),
                     ..
                 },
