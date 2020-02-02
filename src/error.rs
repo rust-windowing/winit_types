@@ -149,7 +149,7 @@ pub enum ErrorType {
     ContextLost,
 
     /// Multiple errors happened.
-    Multiple(Vec<Box<Error>>),
+    Multiple(Vec<Error>),
 }
 
 impl ErrorType {
@@ -157,7 +157,7 @@ impl ErrorType {
     /// You can't put the match statment in the function else the borrow checker dies.
     fn append(&mut self, err: Error) {
         match self {
-            ErrorType::Multiple(ref mut errs) => errs.push(Box::new(err)),
+            ErrorType::Multiple(ref mut errs) => errs.push(err),
             _ => unreachable!(),
         };
     }
