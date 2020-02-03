@@ -1,4 +1,14 @@
 #![cfg(target_os = "android")]
 
-use std::sync::Arc;
-pub type OsError = Arc<std::io::Error>;
+#[derive(Clone, Debug)]
+pub enum OsError {
+    Misc(String),
+}
+
+impl std::fmt::Display for OsError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            Self::Misc(e) => f.pad(e),
+        }
+    }
+}
